@@ -9,7 +9,11 @@ void options()
 void manual()
 {
 	
-	printf("\nNow in manual");
+	printf("\n-----\nRules\n-----\n");
+	
+	//insert rules here, you can delete all these comments
+	//for example, "each turn a player has 3 opporunties to roll the dice"
+	//you can look up the rules and put them here as print statements
 }
 
 void gameLoop()
