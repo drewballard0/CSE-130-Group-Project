@@ -10,6 +10,12 @@ void manual()
 {
 	
 	printf("\n-----\nRules\n-----\n");
+	printf("\n The ojective is roll the dice for combinations, and have the highest score after 13 rounds.");
+	printf("\n each turn a player has 3 opporunties to roll the dice");
+	printf("\n On your first roll you will roll all five dice. Set any scoring combinations aside.");
+	printf("\n On your second roll you can reroll all the dice or just the non scoring dice.");
+	printf("\n On your third roll you must enter the score of one scoring combination aquired on your score card.");
+
 	
 	//insert rules here, you can delete all these comments
 	//for example, "each turn a player has 3 opporunties to roll the dice"
@@ -26,7 +32,7 @@ void gameLoop()
 void main(){
 	int menuInput;
 	printf("\n-----------------------\n"
-			"Welcome to Yatzhee in C"
+			"Welcome to Yahtzee in C"
 			"\n-----------------------\n");
 	while(1)
 	{
