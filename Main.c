@@ -1,5 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
+
 void options()
 {
 	
@@ -22,10 +25,69 @@ void manual()
 	//you can look up the rules and put them here as print statements
 }
 
+void diceRoll()
+{
+	int i;
+	int convInt = 0;//helps convert array to int
+	int combo[5];//dice 5 digit combo
+	time_t t;
+	
+	char diceOne[] = ("\n-----\n|   |\n| o |\n|   |\n-----");
+	char diceTwo[] = ("\n-----\n|o  |\n|   |\n|  o|\n-----");
+	char diceThree[] = ("\n-----\n|o  |\n| o |\n|  o|\n-----");
+	char diceFour[] = ("\n-----\n|o o|\n|   |\n|o o|\n-----");
+	char diceFive[] = ("\n-----\n|o o|\n| o |\n|o o|\n-----");
+	char diceSix[] = ("\n-----\n|o o|\n|o o|\n|o o|\n-----");
+	//this is the dice displays ins ASCII
+	
+	srand((unsigned) time(&t));//declare rand
+	
+	for( i = 1 ; i < 6 ; i++ ) 
+	{
+		combo[i] = ("%d", rand() % 6 +1);//puts random nums in array
+		
+		convInt = 10 * convInt + combo[i];//converts array to an int
+		
+		if (combo[i] == 1) //turns the 5 digit array into dice display
+		{
+			printf("%s",diceOne);
+		}
+		if (combo[i] == 2)
+		{
+			printf("%s",diceTwo);
+		}
+		if (combo[i] == 3)
+		{
+			printf("%s",diceThree);
+		}
+		if (combo[i] == 4)
+		{
+			printf("%s",diceFour);
+		}
+		if (combo[i] == 5)
+		{
+			printf("%s",diceFive);
+		}
+		if (combo[i] == 6)
+		{
+			printf("%s",diceSix);
+		}
+		
+	}
+	printf("\nYour role set: %d ",convInt);
+	
+	
+	
+}
+
 void gameLoop()
 {
+	int readyInput;
 	
-	printf("\nYou have now started the game");
+	printf("\nRoll your set of 5 dice? type 1 when ready.\nInput: ");
+	scanf("%d", &readyInput);
+	diceRoll();
+	
 }
 
 
