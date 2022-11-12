@@ -42,7 +42,7 @@ void diceRoll()
 	
 	srand((unsigned) time(&t));//declare rand
 	
-	for( i = 1 ; i < 6 ; i++ ) 
+	for( i = 0 ; i < 5 ; i++ ) 
 	{
 		combo[i] = ("%d", rand() % 6 +1);//puts random nums in array
 		
@@ -75,7 +75,7 @@ void diceRoll()
 		
 	}
 	printf("\nYour role set: %d ",convInt);
-	
+	scoreMain(combo);
 	
 	
 }
@@ -85,7 +85,7 @@ void gameLoop()
 	int readyInput;
 	
 	printf("\nRoll your set of 5 dice? type 1 when ready.\nInput: ");
-	scanf("%d", &readyInput);
+	scanf_s("%d", &readyInput);
 	diceRoll();
 	
 }
@@ -100,7 +100,7 @@ void main(){
 	{
 		printf("\n---------\n1.Start \n2.Manual \n3.Options\n---------");
 		printf("\nYour option: ");
-		scanf("%d", &menuInput);
+		scanf_s("%d", &menuInput);
 		if (menuInput == 1)
 		{
 			gameLoop();
