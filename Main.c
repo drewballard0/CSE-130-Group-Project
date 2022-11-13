@@ -3,6 +3,8 @@
 #include <string.h>
 #include <time.h>
 
+int reroll(int combo[]);
+
 void options()
 {
 	
@@ -27,7 +29,8 @@ void manual()
 
 void diceRoll()
 {
-	int i;
+	int i,x;
+	int input, numReroll;//user input
 	int convInt = 0;//helps convert array to int
 	int combo[5];//dice 5 digit combo
 	time_t t;
@@ -75,9 +78,37 @@ void diceRoll()
 		
 	}
 	printf("\nYour role set: %d ",convInt);
-	scoreMain(combo);
-	
-	
+	printf("\n--------------------\n");
+	reroll(combo);
+}
+
+int reroll(int combo[])
+{
+	int input,numReroll, convInt = 0, i;
+	printf("Do you want to reroll? \n1.Yes\n2.No\nEnter: ");
+	scanf_s("%d", &input);
+
+	if (input == 1) {
+		printf("\nHow many dice you want to reroll?: ");
+		scanf_s("%d", &numReroll);
+		for (i = 0; i < numReroll; i++) {
+			printf("From 1 to 5, Reroll dice: ");
+			scanf_s("%d", &input);
+			combo[input -1] = ("%d", rand() % 6 + 1);
+
+		}
+		for (i = 0; i < 5; i++)
+		{
+			convInt = 10 * convInt + combo[i];
+		}
+		printf("\n----------------------\nYour new roll is: %d\n----------------------\n", convInt);
+
+		reroll(combo);
+	}
+	else if (input == 2) {
+		scoreMain(combo);
+	}
+	return 0;
 }
 
 void gameLoop()
