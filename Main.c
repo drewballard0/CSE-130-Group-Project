@@ -18,7 +18,7 @@ void manual()
 	printf("\n The ojective is roll the dice for combinations, and have the highest score after 13 rounds.");
 	printf("\n each turn a player has 3 opporunties to roll the dice");
 	printf("\n On your first roll you will roll all five dice. Set any scoring combinations aside.");
-	printf("\n On your second roll you can reroll all the dice or just the non scoring dice.");
+	printf("\n On your second roll you can reroll all the dice or select dice, keeping the others");
 	printf("\n On your third roll you must enter the score of one scoring combination aquired on your score card.");
 
 	
@@ -29,8 +29,7 @@ void manual()
 
 void diceRoll()
 {
-	int i,x;
-	int input, numReroll;//user input
+	int i;
 	int convInt = 0;//helps convert array to int
 	int combo[5];//dice 5 digit combo
 	time_t t;
@@ -84,46 +83,72 @@ void diceRoll()
 
 int reroll(int combo[])
 {
-	int input,numReroll, convInt = 0, i;
+	int input, numReroll, convInt = 0, i = 0, x = 0, c;
+	int* keeps = {0};
+	int test = 0;
+
 	printf("Do you want to reroll? \n1.Yes\n2.No\nEnter: ");
 	scanf_s("%d", &input);
 
-	if (input == 1) {
-		printf("\nHow many dice you want to reroll?: ");
-		scanf_s("%d", &numReroll);
-		for (i = 0; i < numReroll; i++) {
-			printf("From 1 to 5, Reroll dice: ");
-			scanf_s("%d", &input);
-			combo[input -1] = ("%d", rand() % 6 + 1);
 
+	if (input == 1) {
+		printf("\nHow many dice you want to keep?: ");
+		scanf_s("%d", &numReroll);
+		/*if (rerollRound = 0)
+		{
+			keeps = (int*)malloc(numReroll * sizeof(int));
+		}
+		else 
+		{
+			keeps = realloc(keeps, numReroll* sizeof(int));
+		}*/
+		
+		keeps = (int*)malloc(numReroll * sizeof(int));
+		
+		for (c = 0; c < numReroll; c++) {
+			printf("Enter dice to keep, one at time, ascending order: ");
+			scanf_s("%d", &input);
+			keeps[c] = (input-1); //postion of dice to be kept
+			test++;
+			if (test == numReroll)
+			{
+				for (x = 0; x < 5; x++)
+				{
+					if (x == keeps[i]) {
+						i+=1;
+						continue;
+					}
+					if (x != keeps[i])
+					{
+						combo[x] = ("%d", rand() % 6 + 1);
+					}
+
+				}
+
+			}
 		}
 		for (i = 0; i < 5; i++)
 		{
 			convInt = 10 * convInt + combo[i];
 		}
-		printf("\n----------------------\nYour new roll is: %d\n----------------------\n", convInt);
-
+		
+		printf("\n----------------------\nYour roll is: %d\n----------------------\n", convInt);
 		reroll(combo);
 	}
-	else if (input == 2) {
+
+	else if (input == 1) {
+		system("CLR");
+		printf("\nYou can't reroll anymore, Enter your score\n");
 		scoreMain(combo);
 	}
-	return 0;
-}
 
-void gameLoop()
-{
-	int readyInput;
-	
-	printf("\nRoll your set of 5 dice? type 1 when ready.\nInput: ");
-	scanf_s("%d", &readyInput);
-	diceRoll();
-	
+	return 0;
 }
 
 
 void main(){
 	int menuInput;
+	int readyInput;
 	printf("\n-----------------------\n"
 			"Welcome to Yahtzee in C"
 			"\n-----------------------\n");
@@ -134,7 +159,9 @@ void main(){
 		scanf_s("%d", &menuInput);
 		if (menuInput == 1)
 		{
-			gameLoop();
+			printf("\nRoll your set of 5 dice? type 1 when ready.\nInput: ");
+			scanf_s("%d", &readyInput);
+			diceRoll();
 			break;
 		}
 		if (menuInput == 2)

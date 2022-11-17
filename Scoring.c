@@ -106,7 +106,7 @@ void score_card() { //print score card for each new round
 	printf("Total\t\t\tVAR\tVAR\n");
 }
 
-int scoreMain(int roll[]) { //roll is the players roll from Main()
+int scoreMain(int roll[]) { //roll is the players roll from Main(), this use to be combo
 	struct scores user = {0,0,0,0,0,0,0,0,0,0,0,0,0,0}; //initalize all scores to 0 at start of game for user
 	struct scores comp = {0,0,0,0,0,0,0,0,0,0,0,0,0,0}; //same but for computer opponent 
 	bool check[15] = { false }; //create system to check if category has already been used
