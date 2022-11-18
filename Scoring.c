@@ -285,8 +285,7 @@ void score_card(struct scores user) { //print score card for each new round
 	printf("Total\t\t\t%d\tVAR\n", user.total_score);
 }
 
-int main() {
-	int combo[] = {1,3,3,3,3}; //take in roll values
+int scoreMain(int combo[]) {
 	struct scores user = {0,0,0,0,0,0,0,0,0,0,0,0,0,0}; //initalize all scores to 0 at start of game for user
 	struct scores comp = {0,0,0,0,0,0,0,0,0,0,0,0,0,0}; //same but for computer opponent 
 	bool check[15] = { false }; //create system to check if category has already been used
@@ -295,7 +294,7 @@ int main() {
 	while (round_number < 13) { //ensure only 13 rounds are played
 			score_card(user); //print score card
 			printf("Please choose a category: ");
-			scanf("%d", &choice); //user picks category
+			scanf_s("%d", &choice); //user picks category
 		if (check[choice] == true) { //check to see if category has already been used
 				printf("Cannot use same category twice.");
 				system("clear"); //clear screen

@@ -4,7 +4,7 @@
 #include <time.h>
 
 int reroll(int combo[]);
-//testt
+
 void options()
 {
 	
@@ -136,9 +136,7 @@ int reroll(int combo[])
 		reroll(combo);
 	}
 
-	else if (input == 1) {
-		system("CLR");
-		printf("\nYou can't reroll anymore, Enter your score\n");
+	if (input == 2) {
 		scoreMain(combo);
 	}
 
