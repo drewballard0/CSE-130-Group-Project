@@ -4,7 +4,7 @@
 #include <time.h>
 
 int reroll(int combo[]);
-
+//test
 void options()
 {
 	
