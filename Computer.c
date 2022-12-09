@@ -364,7 +364,7 @@ void update_score(struct scores *user, int choice, int combo[]) {
 		break;
 	}
 
-	// total_score(user, choice);
+	total_score(*user, choice);
 }
 
 
@@ -465,12 +465,12 @@ void playerRound(int combo[], struct scores *user, bool check[]) {
 	score_card(user);
 }
 
-int bestKeep(int combo[],struct scores user, bool check[]) {
+int bestKeep(int combo[], bool check[]) {
 	int keep = 0;
 	int better = 0;
 	int best = 0;
 	int dice[] = { 0,0,0,0,0 };
-	struct scores temp = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+	struct scores temp = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0  };
 
 	// the following is just looping through all possible dice configurations while skipping kept dice
 	// finds the set of dice to keep that improves the score the most number of times
@@ -521,7 +521,7 @@ int bestKeep(int combo[],struct scores user, bool check[]) {
 
 int bestChoice(int combo[], bool check[]) {
 	int choice = 0;
-	struct scores temp = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+	struct scores temp;
 
 	for (int i = 0; i < 13; i++) {
 		if (!check[i]) {
@@ -534,7 +534,7 @@ int bestChoice(int combo[], bool check[]) {
 	return choice;
 }
 
- void compRound(int combo[], struct scores user, bool check[]) {
+ void compRound(int combo[], struct scores *user, bool check[]) {
 	int kept = 0;
 	printf("It is now the computer's turn.\n");
 
@@ -543,12 +543,14 @@ int bestChoice(int combo[], bool check[]) {
 	displayDice(combo);
 
 	printf("The second roll is: ");
-	roll(combo, bestKeep(combo, user, check));
+	roll(combo, bestKeep(combo, check));
 	displayDice(combo);
 
 	printf("\nThe third roll is: ");
-	roll(combo, bestKeep(combo, user, check));
+	roll(combo, bestKeep(combo, check));
 	displayDice(combo);
+
+	printf("---------------END OF COMPUTER TURN");
 
 	update_score(user, bestChoice(combo, check), combo);
 }
@@ -594,10 +596,11 @@ int main() {
 		scanf("%d", &menuInput);
 		if (menuInput == 1)
 		{
-			printf("\nRoll your set of 5 dice? type 1 when ready.\nInput: ");
+			printf("\nType 1 when ready.\nInput: ");
 			scanf("%d", &readyInput);
 			
 			for (int i = 0; i < 13; i++) {
+				compRound(combo, &comp, ccheck);
 				playerRound(combo, &user, pcheck);
 			}
 		}
