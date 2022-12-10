@@ -287,36 +287,36 @@ int get_score(struct scores user, int choice, int combo[]) {
 		return 0;
 	}
 }
-void score_card(struct scores *user) { //print score card for each new round
+void score_card(struct scores *user, struct scores *comp) { //print score card for each new round
 	printf("\nCategory\t\tUser\tComputer\n");
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("1. Aces\t\t\t%d\tVAR\n", user->aces_score); //each round, dynamically updates scores for each category
+	printf("1. Aces\t\t\t%d\t%d\n", user->aces_score, comp->aces_score); //each round, dynamically updates scores for each category
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("2. Twos\t\t\t%d\tVAR\n", user->twos_score);
+	printf("2. Twos\t\t\t%d\t%d\n", user->twos_score, comp->twos_score);
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("3. Threes\t\t%d\tVAR\n", user->threes_score);
+	printf("3. Threes\t\t%d\t%d\n", user->threes_score, comp->threes_score);
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("4. Fours\t\t%d\tVAR\n", user->fours_score);
+	printf("4. Fours\t\t%d\t%d\n", user->fours_score, comp->fours_score);
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("5. Fives\t\t%d\tVAR\n", user->fives_score);
+	printf("5. Fives\t\t%d\t%d\n", user->fives_score, comp->fives_score);
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("6. Sixes\t\t%d\tVAR\n", user->sixes_score);
+	printf("6. Sixes\t\t%d\t%d\n", user->sixes_score, comp->sixes_score);
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("7. Three Of A Kind\t%d\tVAR\n", user->three_ook_score);
+	printf("7. Three Of A Kind\t%d\t%d\n", user->three_ook_score, comp->three_ook_score);
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("8. Four Of A Kind\t%d\tVAR\n", user->four_ook_score);
+	printf("8. Four Of A Kind\t%d\t%d\n", user->four_ook_score, comp->four_ook_score);
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("9. Full House\t\t%d\tVAR\n", user->full_house_score);
+	printf("9. Full House\t\t%d\t%d\n", user->full_house_score, comp->full_house_score);
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("10. Small Straight\t%d\tVAR\n", user->small_straight_score);
+	printf("10. Small Straight\t%d\t%d\n", user->small_straight_score, comp->small_straight_score);
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("11. Large Straight\t%d\tVAR\n", user->large_straight_score);
+	printf("11. Large Straight\t%d\t%d\n", user->large_straight_score, comp->large_straight_score);
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("12. Yahtzee\t\t%d\tVAR\n", user->yahtzee_score);
+	printf("12. Yahtzee\t\t%d\t%d\n", user->yahtzee_score, comp->yahtzee_score);
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("13. Chance\t\t%d\tVAR\n", user->chance_score);
+	printf("13. Chance\t\t%d\t%d\n", user->chance_score, comp->chance_score);
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("Total\t\t\t%d\tVAR\n", user->total_score);
+	printf("Total\t\t\t%d\t%d\n", user->total_score, comp->total_score);
 }
 
 void update_score(struct scores *user, int choice, int combo[]) {
@@ -413,13 +413,14 @@ void displayDice(int combo[]) {
 	}
 }
 
-void playerRound(int combo[], struct scores *user, bool check[]) {
-	int kept = 0; 
+void playerRound(int combo[], struct scores *user, bool check[], struct scores *comp) {
+	score_card(user, comp);
+
+	int kept = 0;
 	roll(combo, kept);
 	displayDice(combo);
 	char input[20];
 	int test = 1;
-
 
 	for (int i = 0; i < 5; i++) {
 		printf("Do you wish to keep die #%d? type \"yes\" or \"no\": ", i + 1);
@@ -447,7 +448,6 @@ void playerRound(int combo[], struct scores *user, bool check[]) {
 	}
 
 	roll(combo, kept);
-	system("clear");
 	displayDice(combo);
 	printf("Please input the number for the chosen scoring category: ");
 	int choice;
@@ -461,8 +461,6 @@ void playerRound(int combo[], struct scores *user, bool check[]) {
 	}
 	update_score(user, choice, combo);
 	check[choice] = true;
-
-	score_card(user);
 }
 
 int bestKeep(int combo[], bool check[]) {
@@ -550,9 +548,9 @@ int bestChoice(int combo[], bool check[]) {
 	roll(combo, bestKeep(combo, check));
 	displayDice(combo);
 
-	printf("---------------END OF COMPUTER TURN");
-
 	update_score(user, bestChoice(combo, check), combo);
+
+	printf("---------------END OF COMPUTER TURN");
 } 
 
 void options()
@@ -601,9 +599,24 @@ int main() {
 			
 			for (int i = 0; i < 13; i++) {
 				compRound(combo, &comp, ccheck);
-				playerRound(combo, &user, pcheck);
-				//compRound(combo, &comp, pcheck);
+				playerRound(combo, &user, pcheck, &comp);
+				system("clear");
 			}
+
+			system("clear");
+			
+			if (user.total_score > comp.total_score) {
+				printf("You win!");
+			}
+			else if (user.total_score < comp.total_score) {
+				printf("You lose!");
+			}
+			else {
+				printf("You tied!");
+			}
+
+			printf("\n\n\n");
+			score_card(&user, &comp);
 		}
 		if (menuInput == 2)
 		{
