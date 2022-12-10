@@ -449,12 +449,15 @@ void playerRound(int combo[], struct scores *user, bool check[], struct scores *
 
 	roll(combo, kept);
 	displayDice(combo);
+
+	score_card(user, comp);
+
 	printf("Please input the number for the chosen scoring category: ");
 	int choice;
 	scanf("%d", &choice);
 	
 
-	while (check[choice]) {
+	while (check[choice] || choice < 0 || choice > 13) {
 		printf("Please enter a valid option: ");
 		scanf("%d", &choice);
 		
@@ -528,6 +531,8 @@ int bestChoice(int combo[], bool check[]) {
 			}
 		}
 	}
+
+	check[choice] = true;
 
 	return choice;
 }
