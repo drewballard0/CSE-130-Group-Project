@@ -208,51 +208,51 @@ int chance(struct scores user, int combo[]) {
 	return user.chance_score;   //always returns sum of all dice
 }
 
-int total_score(struct scores user, int choice) {  //function to update total score
+int total_score(struct scores *user, int choice) {  //function to update total score
 	switch (choice) {   //adds category score to total score
 	case 1:
-		user.total_score = user.total_score + user.aces_score;
+		user->total_score = user->total_score + user->aces_score;
 		break;
 	case 2:
-		user.total_score = user.total_score + user.twos_score;
+		user->total_score = user->total_score + user->twos_score;
 		break;
 	case 3:
-		user.total_score = user.total_score + user.threes_score;
+		user->total_score = user->total_score + user->threes_score;
 		break;
 	case 4:
-		user.total_score = user.total_score + user.fours_score;
+		user->total_score = user->total_score + user->fours_score;
 		break;
 	case 5:
-		user.total_score = user.total_score + user.fives_score;
+		user->total_score = user->total_score + user->fives_score;
 		break;
 	case 6:
-		user.total_score = user.total_score + user.sixes_score;
+		user->total_score = user->total_score + user->sixes_score;
 		break;
 	case 7:
-		user.total_score = user.total_score + user.three_ook_score;
+		user->total_score = user->total_score + user->three_ook_score;
 		break;
 	case 8:
-		user.total_score = user.total_score + user.four_ook_score;
+		user->total_score = user->total_score + user->four_ook_score;
 		break;
 	case 9:
-		user.total_score = user.total_score + user.full_house_score;
+		user->total_score = user->total_score + user->full_house_score;
 		break;
 	case 10:
-		user.total_score = user.total_score + user.small_straight_score;
+		user->total_score = user->total_score + user->small_straight_score;
 		break;
 	case 11:
-		user.total_score = user.total_score + user.large_straight_score;
+		user->total_score = user->total_score + user->large_straight_score;
 		break;
 	case 12:
-		user.total_score = user.total_score + user.yahtzee_score;
+		user->total_score = user->total_score + user->yahtzee_score;
 		break;
 	case 13:
-		user.total_score = user.total_score + user.chance_score;
+		user->total_score = user->total_score + user->chance_score;
 		break;
 	default:
 		break;
 	}
-	return user.total_score;   //returns total score to main
+	return user->total_score;   //returns total score to main
 }
 
 int get_score(struct scores user, int choice, int combo[]) {
@@ -364,7 +364,7 @@ void update_score(struct scores *user, int choice, int combo[]) {
 		break;
 	}
 
-	// total_score(user, choice);
+	total_score(user, choice);
 }
 
 
@@ -447,6 +447,7 @@ void playerRound(int combo[], struct scores *user, bool check[]) {
 	}
 
 	roll(combo, kept);
+	system("clear");
 	displayDice(combo);
 	printf("Please input the number for the chosen scoring category: ");
 	int choice;
@@ -461,7 +462,6 @@ void playerRound(int combo[], struct scores *user, bool check[]) {
 	update_score(user, choice, combo);
 	check[choice] = true;
 
-	
 	score_card(user);
 }
 
@@ -534,7 +534,7 @@ int bestChoice(int combo[], bool check[]) {
 	return choice;
 }
 
- void compRound(int combo[], struct scores user, bool check[]) {
+/* void compRound(int combo[], struct scores user, bool check[]) {
 	int kept = 0;
 	printf("It is now the computer's turn.\n");
 
@@ -551,7 +551,7 @@ int bestChoice(int combo[], bool check[]) {
 	displayDice(combo);
 
 	update_score(user, bestChoice(combo, check), combo);
-}
+} */
 
 void options()
 {
@@ -599,6 +599,7 @@ int main() {
 			
 			for (int i = 0; i < 13; i++) {
 				playerRound(combo, &user, pcheck);
+				//compRound(combo, &comp, pcheck);
 			}
 		}
 		if (menuInput == 2)
