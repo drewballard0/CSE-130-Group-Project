@@ -413,91 +413,91 @@ void displayDice(int combo[]) {
 	}
 }
 
-void playerRound(int combo[], struct scores *user, bool check[], struct scores *comp) {
-	score_card(user, comp);
+void playerRound(int combo[], struct scores *user, bool check[], struct scores *comp) { //runs one round of the game for the player, ends with single category selection
+	score_card(user, comp); //displays the scorecard to the user
 
-	int kept = 0;
-	roll(combo, kept);
+	int kept = 0; //tracks dice to be kept, used as if it is a 5 digit binary number, with each digit representing a kept die
+	roll(combo, kept); //first roll
 	displayDice(combo);
-	char input[20];
-	int test = 1;
+	char input[20]; //string for user input
+	int test = 1; //variable used in bitwise or calculations to assign if a die is kept
 
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 5; i++) { //allows player to select dice to keep
 		printf("Do you wish to keep die #%d? type \"yes\" or \"no\": ", i + 1);
 		scanf("%s", input);
 
-		if (strcmp(input, "yes") == 0) {
-			kept = kept | test;
+		if (strcmp(input, "yes") == 0) { 
+			kept = kept | test; //bitwise or assigns a 1 in the proper place if that die is to be kept
 		}
-		test *= 2;
+		test *= 2; //multiplies by 2 so that next test assigns to the next binary digit
 	}
 
-	roll(combo, kept);
+	roll(combo, kept); //second roll
 	kept = 0;
 	displayDice(combo);
 	test = 1;
 
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 5; i++) { //allows user to select dice to keep
 		printf("Do you wish to keep die #%d? type \"yes\" or \"no\": ", i + 1);
 		scanf("%s", input);
 
 		if (strcmp(input, "yes") == 0) {
-			kept = kept | test;
+			kept = kept | test; //bitwise or assigns a 1 in the proper place if that die is to be kept
 		}
-		test *= 2;
+		test *= 2; //multiplies by 2 so that next test assigns to the next binary digit
 	}
 
-	roll(combo, kept);
+	roll(combo, kept); //third roll
 	displayDice(combo);
 
-	score_card(user, comp);
+	score_card(user, comp); //displays the scorecard 
 
 	printf("Please input the number for the chosen scoring category: ");
 	int choice;
-	scanf("%d", &choice);
+	scanf("%d", &choice); //asks player to choose scoring category
 	
 
-	while (check[choice] || choice < 0 || choice > 13) {
+	while (check[choice] || choice < 0 || choice > 13) { //tests for invalid input
 		printf("Please enter a valid option: ");
 		scanf("%d", &choice);
 		
 	}
-	update_score(user, choice, combo);
-	check[choice] = true;
+	update_score(user, choice, combo); //score updated
+	check[choice] = true; //assigns chosen category to true so that it may not be selected again
 }
 
-int bestKeep(int combo[], bool check[]) {
-	int keep = 0;
-	int better = 0;
-	int best = 0;
-	int dice[] = { 0,0,0,0,0 };
-	struct scores temp = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0  };
+int bestKeep(int combo[], bool check[]) { //returns the best combination of dice to keep
+	int keep = 0; //tracks the dice to be kept, with each digit of a 5 digit binary number representing the 5 dice
+	int better = 0; //this tracks how many combinations of potential dice rolls yield a better result than keeping all dice
+	int best = 0; //this is the highest achieved result of the previous variable
+	int dice[] = { 0,0,0,0,0 }; //the dice to be compared to combo
+	struct scores temp = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0  }; //this is needed for the get_score function to run
 
 	// the following is just looping through all possible dice configurations while skipping kept dice
 	// finds the set of dice to keep that improves the score the most number of times
 	// this is not trying to achieve perfect play, but just be better than random choices
-	for (int i = 0; i < 32; i++) {
+	for (int i = 0; i < 32; i++) { //loops through all possible combinations of kept dice
 		better = 0;
-		for (int j = 0; j < 13; j++) {
+		for (int j = 0; j < 13; j++) { //loops through all scoring categories
 			if (!check[j]) {
-				for (int d1 = 1; d1 <= 6; d1++) {
-					if (i & 1 != 0) {
-						for (int d2 = 1; d2 <= 6; d2++) {
+				for (int d1 = 1; d1 <= 6; d1++) { //loops through all possible results of first die being kept
+					if (i & 1 != 0) { //bitwise and to check if die is being kept
+						for (int d2 = 1; d2 <= 6; d2++) { //die #2
 							if (i & 2 != 0) {
-								for (int d3 = 1; d3 <= 6; d3++) {
+								for (int d3 = 1; d3 <= 6; d3++) { //die #3
 									if (i & 4 != 0) {
-										for (int d4 = 1; d4 <= 6; d4++) {
+										for (int d4 = 1; d4 <= 6; d4++) { //die #4
 											if (i & 8 != 0) {
-												for (int d5 = 1; d5 <= 6; d5++) {
+												for (int d5 = 1; d5 <= 6; d5++) { //die #5
 													if (i & 16 != 0) {
-														dice[0] = d1;
+														dice[0] = d1; 
 														dice[1] = d2;
 														dice[2] = d3;
 														dice[3] = d4;
 														dice[4] = d5;
 
-														if (get_score(temp, j, dice) > get_score(temp, j, combo)) {
-															better++;
+														if (get_score(temp, j, dice) > get_score(temp, j, combo)) { //compares the result of each possible roll with each possible condition to keeping all dice
+															better++; 
 														}
 													}
 												}
@@ -511,8 +511,8 @@ int bestKeep(int combo[], bool check[]) {
 				}
 			}
 		}
-		if (better > best) {
-			keep = i;
+		if (better > best) { //checks if the last tested combination of kept dice is better than the previous best
+			keep = i; //updates keep with the new best combination
 			best = better;
 		}
 	}
@@ -520,40 +520,40 @@ int bestKeep(int combo[], bool check[]) {
 	return keep;
 }
 
-int bestChoice(int combo[], bool check[]) {
-	int choice = 0;
+int bestChoice(int combo[], bool check[]) { //returns the highest scoring category given a set of 5 dice and an array of which categories are already used
+	int choice = 0; //tracks the best choice found
 	struct scores temp;
 
-	for (int i = 0; i < 13; i++) {
-		if (!check[i]) {
-			if (get_score(temp, i, combo) > get_score(temp, choice, combo)) {
+	for (int i = 0; i < 13; i++) { //loops through all scoring categories
+		if (!check[i]) { //checks if category is already used
+			if (get_score(temp, i, combo) > get_score(temp, choice, combo)) { //checks if score is better than previous best choice
 				choice = i;
 			}
 		}
 	}
 
-	check[choice] = true;
+	check[choice] = true; //sets the selected choice to true, so that the computer does not select it again
 
 	return choice;
 }
 
- void compRound(int combo[], struct scores *user, bool check[]) {
+ void compRound(int combo[], struct scores *user, bool check[]) { //runs through one round of the game for the computer, scores one category
 	int kept = 0;
 	printf("It is now the computer's turn.\n");
 
-	printf("The first roll is: ");
-	roll(combo, kept);
+	printf("The first roll is: "); 
+	roll(combo, kept); //computers first roll
 	displayDice(combo);
 
-	printf("The second roll is: ");
-	roll(combo, bestKeep(combo, check));
+	printf("The second roll is: "); 
+	roll(combo, bestKeep(combo, check)); //computers second roll
 	displayDice(combo);
 
 	printf("\nThe third roll is: ");
-	roll(combo, bestKeep(combo, check));
+	roll(combo, bestKeep(combo, check)); //computers third roll
 	displayDice(combo);
 
-	update_score(user, bestChoice(combo, check), combo);
+	update_score(user, bestChoice(combo, check), combo); //score of computer is updated
 
 	printf("---------------END OF COMPUTER TURN");
 } 
@@ -602,18 +602,18 @@ int main() {
 			printf("\nType 1 when ready.\nInput: ");
 			scanf("%d", &readyInput);
 			
-			for (int i = 0; i < 13; i++) {
+			for (int i = 0; i < 13; i++) { //loops through all 13 game rounds
 				compRound(combo, &comp, ccheck);
 				playerRound(combo, &user, pcheck, &comp);
-				system("clear");
+				system("clear"); //clears screen at end of round
 			}
 
-			system("clear");
+			system("clear"); //clears screen at end of game
 			
-			if (user.total_score > comp.total_score) {
+			if (user.total_score > comp.total_score) { //checks if player has won
 				printf("You win!");
 			}
-			else if (user.total_score < comp.total_score) {
+			else if (user.total_score < comp.total_score) { //checks if player has lost
 				printf("You lose!");
 			}
 			else {
@@ -621,7 +621,7 @@ int main() {
 			}
 
 			printf("\n\n\n");
-			score_card(&user, &comp);
+			score_card(&user, &comp); //displays final scorecard
 		}
 		if (menuInput == 2)
 		{
