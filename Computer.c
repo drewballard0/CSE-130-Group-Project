@@ -143,18 +143,18 @@ int full_house(struct scores user, int combo[]) {
 
 int small_straight(struct scores user, int combo[]) {
 	sort(combo);  //sorts dice
-	int difference;
+	int difference; 
 	bool sequential = true;  //bool used to determine if dice are in sequence or not
 	bool skipped = false;    //bool used to see if die was skipped
 	for (int i = 0; i < 4; i++) {
 		difference = combo[i + 1] - combo[i];   //calculates difference between die and the next one
-		if (difference != 1) {        //only activates if dice are in sequence
+		if (difference != 1) {        //only activates if dice are not in sequence
 			if (difference == 0 && skipped == false) {  //however, they could be equal. in this case the possibility of a small straight isn't gone
 				skipped = true; //only one die can be skipped if there is to be a small straight, so skipped is set to true
 				continue; //skips the rest of the loop. now no other dice can be skipped
 			}
 			else {
-				sequential = false; //if difference is not 0 or 1, dice are not in sequence
+				sequential = false; //if difference is not 0 or 1, dice are not in sequence and are not equal
 			}
 			break;
 		}
@@ -195,7 +195,7 @@ int yahtzee(struct scores user, int combo[]) {
 			break;
 		}
 		else {
-			user.yahtzee_score = 50;  //if they are equal it scores 50
+			user.yahtzee_score = 50;  //if they are all equal it scores 50
 		}
 	}
 	return user.yahtzee_score;
@@ -252,7 +252,7 @@ int total_score(struct scores *user, int choice) {  //function to update total s
 	default:
 		break;
 	}
-	return user->total_score;   //returns total score to main
+	return user->total_score;   //returns total score
 }
 
 int get_score(struct scores user, int choice, int combo[]) {
@@ -292,7 +292,7 @@ void score_card(struct scores *user, struct scores *comp) { //print score card f
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
 	printf("1. Aces\t\t\t%d\t%d\n", user->aces_score, comp->aces_score); //each round, dynamically updates scores for each category
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
-	printf("2. Twos\t\t\t%d\t%d\n", user->twos_score, comp->twos_score);
+	printf("2. Twos\t\t\t%d\t%d\n", user->twos_score, comp->twos_score); //pointers used to pass by reference since score is updated in a function
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
 	printf("3. Threes\t\t%d\t%d\n", user->threes_score, comp->threes_score);
 	printf("- - - - - - - - - - - - - - - - - - - -\n");
