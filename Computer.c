@@ -478,32 +478,37 @@ int bestKeep(int combo[], bool check[]) { //returns the best combination of dice
 	for (int i = 0; i < 32; i++) { //loops through all possible combinations of kept dice
 		better = 0;
 		for (int j = 0; j < 13; j++) { //loops through all scoring categories
+			dice[0] = combo[0];
+			dice[1] = combo[1];
+			dice[2] = combo[2];
+			dice[3] = combo[3];
+			dice[4] = combo[4];
 			if (!check[j]) {
 				for (int d1 = 1; d1 <= 6; d1++) { //loops through all possible results of first die being kept
-					if (i & 1 != 0) { //bitwise and to check if die is being kept
-						for (int d2 = 1; d2 <= 6; d2++) { //die #2
-							if (i & 2 != 0) {
-								for (int d3 = 1; d3 <= 6; d3++) { //die #3
-									if (i & 4 != 0) {
-										for (int d4 = 1; d4 <= 6; d4++) { //die #4
-											if (i & 8 != 0) {
-												for (int d5 = 1; d5 <= 6; d5++) { //die #5
-													if (i & 16 != 0) {
-														dice[0] = d1; 
-														dice[1] = d2;
-														dice[2] = d3;
-														dice[3] = d4;
-														dice[4] = d5;
-
-														if (get_score(temp, j, dice) > get_score(temp, j, combo)) { //compares the result of each possible roll with each possible condition to keeping all dice
-															better++; 
-														}
-													}
-												}
-											}
-										}
+					for (int d2 = 1; d2 <= 6; d2++) { 
+						for (int d3 = 1; d3 <= 6; d3++) {
+							for (int d4 = 1; d4 <= 6; d4++) {
+								for (int d5 = 1; d5 <= 6; d5++) {
+									if (i & 1 == 0) {
+										dice[0] = d1;
 									}
-								}	
+									if (i & 2 == 0) {
+										dice[1] = d2;
+									}
+									if (i & 4 == 0) {
+										dice[2] = d3;
+									}
+									if (i & 8 == 0) {
+										dice[3] = d4;
+									}
+									if (i & 16 == 0) {
+										dice[4] = d5;
+									}
+
+									if (get_score(temp, j, dice) > get_score(temp, j, combo)) {
+										better++;
+									}
+								}
 							}
 						}
 					}
@@ -523,6 +528,13 @@ int bestChoice(int combo[], bool check[]) { //returns the highest scoring catego
 	int choice = 0; //tracks the best choice found
 	struct scores temp;
 
+	for (int i = 0; i < 13; i++) { //sets choice to the first valid category
+		if (!check[i]) {
+			choice = i;
+			break;
+		}
+	}
+
 	for (int i = 0; i < 13; i++) { //loops through all scoring categories
 		if (!check[i]) { //checks if category is already used
 			if (get_score(temp, i, combo) > get_score(temp, choice, combo)) { //checks if score is better than previous best choice
@@ -530,8 +542,6 @@ int bestChoice(int combo[], bool check[]) { //returns the highest scoring catego
 			}
 		}
 	}
-
-	check[choice] = true; //sets the selected choice to true, so that the computer does not select it again
 
 	return choice;
 }
@@ -552,7 +562,10 @@ int bestChoice(int combo[], bool check[]) { //returns the highest scoring catego
 	roll(combo, bestKeep(combo, check)); //computers third roll
 	displayDice(combo);
 
-	update_score(user, bestChoice(combo, check), combo); //score of computer is updated
+	int choice = bestChoice(combo, check);
+	check[choice] = true; //sets the selected choice to true, so that the computer does not select it again
+
+	update_score(user, choice, combo); //score of computer is updated
 
 	printf("---------------END OF COMPUTER TURN");
 } 
