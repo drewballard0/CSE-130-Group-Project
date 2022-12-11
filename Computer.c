@@ -369,17 +369,17 @@ void update_score(struct scores *user, int choice, int combo[]) {
 
 
 
-void roll(int combo[], int kept) {
+void roll(int combo[], int kept) { //rolls any dice that are not kept, given an array of dice and an integer representation of kept dice
 	time_t t;
 	srand((unsigned)time(&t));
-	int test = 1;
+	int test = 1; //variable to be repeatedly multiplied by 2 to be used in bitwise and operations
 
 
-	for (int i = 0; i < 5; i++) {
-		if ((kept & test) == 0 ) {
+	for (int i = 0; i < 5; i++) { //loops through all 5 dice
+		if ((kept & test) == 0 ) { //uses a bitwise and to test if the die is kept, 
 			combo[i] = ("%d", rand() % 6 + 1);
 		}
-		test *= 2;
+		test *= 2; //multiplies by two so that bitwise and checks the next digit
 	}
 }
 
