@@ -318,7 +318,7 @@ void score_card(struct scores *user, struct scores *comp) { //print score card f
 	printf("Total\t\t\t%d\t%d\n", user->total_score, comp->total_score);
 }
 
-void update_score(struct scores *user, int choice, int combo[]) {
+void update_score(struct scores *user, int choice, int combo[]) {   //updates score based on selected category
 	switch (choice) { 
 	case 1:
 		user->aces_score = aces(*user, combo);
@@ -363,7 +363,7 @@ void update_score(struct scores *user, int choice, int combo[]) {
 		break;
 	}
 
-	total_score(user, choice);
+	total_score(user, choice);   //always updates total score
 }
 
 
@@ -382,7 +382,7 @@ void roll(int combo[], int kept) { //rolls any dice that are not kept, given an 
 	}
 }
 
-void displayDie(int face) {
+void displayDie(int face) {    //stores dice displays
 	switch (face) {
 	case 1: 
 		printf("\n-----\n|   |\n| o |\n|   |\n-----");
@@ -405,7 +405,7 @@ void displayDie(int face) {
 	}
 }
 
-void displayDice(int combo[]) {
+void displayDice(int combo[]) {   //prints out each die
 	for (int i = 0; i < 5; i++) {
 		displayDie(combo[i]);
 		printf("\n");
@@ -597,7 +597,7 @@ int main() {
 	int readyInput;
 	struct scores user = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0 }; //initalize all scores to 0 at start of game for user
 	struct scores comp = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0 }; //same but for computer opponent 
-	bool pcheck[] = { false, false, false, false, false, false, false, false, false, false, false, false, false };
+	bool pcheck[] = { false, false, false, false, false, false, false, false, false, false, false, false, false };   //used to check if category has already been used
 	bool ccheck[] = { false, false, false, false, false, false, false, false, false, false, false, false, false };
 	int combo[] = { 0,0,0,0,0 };
 
@@ -637,11 +637,11 @@ int main() {
 
 			break;
 		}
-		if (menuInput == 2)
+		if (menuInput == 2)  //goes to manual
 		{
 			manual();
 		}
-		if (menuInput == 3)
+		if (menuInput == 3)  //goes to options
 		{
 			options();
 		}
