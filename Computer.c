@@ -634,6 +634,8 @@ int main() {
 
 			printf("\n\n\n");
 			score_card(&user, &comp); //displays final scorecard
+
+			break;
 		}
 		if (menuInput == 2)
 		{
