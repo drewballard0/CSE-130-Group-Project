@@ -452,14 +452,13 @@ void playerRound(int combo[], struct scores *user, bool check[], struct scores *
 	score_card(user, comp); //displays the scorecard 
 
 	printf("Please input the number for the chosen scoring category: ");
-	int choice;
-	scanf("%d", &choice); //asks player to choose scoring category
-	
+	scanf("%s", input); //asks player to choose scoring category
+	int choice = atoi(input);
 
 	while (check[choice - 1] || choice < 1 || choice > 13) { //tests for invalid input
 		printf("Please enter a valid option: ");
-		scanf("%d", &choice);
-		
+		scanf("%s", input);
+		choice = atoi(input);
 	}
 	update_score(user, choice, combo); //score updated
 	check[choice - 1] = true; //assigns chosen category to true so that it may not be selected again
