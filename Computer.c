@@ -456,13 +456,13 @@ void playerRound(int combo[], struct scores *user, bool check[], struct scores *
 	scanf("%d", &choice); //asks player to choose scoring category
 	
 
-	while (check[choice] || choice < 0 || choice > 13) { //tests for invalid input
+	while (check[choice - 1] || choice < 1 || choice > 13) { //tests for invalid input
 		printf("Please enter a valid option: ");
 		scanf("%d", &choice);
 		
 	}
 	update_score(user, choice, combo); //score updated
-	check[choice] = true; //assigns chosen category to true so that it may not be selected again
+	check[choice - 1] = true; //assigns chosen category to true so that it may not be selected again
 }
 
 int bestKeep(int combo[], bool check[]) { //returns the best combination of dice to keep
@@ -477,13 +477,13 @@ int bestKeep(int combo[], bool check[]) { //returns the best combination of dice
 	// this is not trying to achieve perfect play, but just be better than random choices
 	for (int i = 0; i < 32; i++) { //loops through all possible combinations of kept dice
 		better = 0;
-		for (int j = 0; j < 13; j++) { //loops through all scoring categories
+		for (int j = 1; j <= 13; j++) { //loops through all scoring categories
 			dice[0] = combo[0];
 			dice[1] = combo[1];
 			dice[2] = combo[2];
 			dice[3] = combo[3];
 			dice[4] = combo[4];
-			if (!check[j]) {
+			if (!check[j - 1]) {
 				for (int d1 = 1; d1 <= 6; d1++) { //loops through all possible results of first die being kept
 					for (int d2 = 1; d2 <= 6; d2++) { 
 						for (int d3 = 1; d3 <= 6; d3++) {
@@ -528,15 +528,15 @@ int bestChoice(int combo[], bool check[]) { //returns the highest scoring catego
 	int choice = 0; //tracks the best choice found
 	struct scores temp;
 
-	for (int i = 0; i < 13; i++) { //sets choice to the first valid category
-		if (!check[i]) {
+	for (int i = 1; i <= 13; i++) { //sets choice to the first valid category
+		if (!check[i - 1]) {
 			choice = i;
 			break;
 		}
 	}
 
-	for (int i = 0; i < 13; i++) { //loops through all scoring categories
-		if (!check[i]) { //checks if category is already used
+	for (int i = 1; i <= 13; i++) { //loops through all scoring categories
+		if (!check[i - 1]) { //checks if category is already used
 			if (get_score(temp, i, combo) > get_score(temp, choice, combo)) { //checks if score is better than previous best choice
 				choice = i;
 			}
@@ -563,7 +563,7 @@ int bestChoice(int combo[], bool check[]) { //returns the highest scoring catego
 	displayDice(combo);
 
 	int choice = bestChoice(combo, check);
-	check[choice] = true; //sets the selected choice to true, so that the computer does not select it again
+	check[choice - 1] = true; //sets the selected choice to true, so that the computer does not select it again
 
 	update_score(user, choice, combo); //score of computer is updated
 
